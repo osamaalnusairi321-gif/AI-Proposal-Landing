@@ -18,6 +18,20 @@ function validateRegistration(values) {
   if (!website) errors.companyWebsite = 'Enter your company website.';
   else if (website.length > 500 || !websiteParts || !host.test(websiteParts[1]) || (websiteParts[2] && (+websiteParts[2] < 1 || +websiteParts[2] > 65535)) || /%(?![a-f0-9]{2})/i.test(website)) errors.companyWebsite = 'Enter a valid website, such as https://company.com.';
   if (phone && !/^[0-9]{7,15}$/.test(phone)) errors.phone = 'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.';
+  if (values.language === 'ar') {
+    const arabic = {
+      'Enter your full name.': 'أدخل اسمك الكامل.',
+      'Use letters, spaces, apostrophes, hyphens or periods for your name.': 'اكتب اسمك بالحروف. يمكنك استخدام المسافات والشرطة والنقطة وعلامة الاقتباس.',
+      'Enter your work email address.': 'أدخل بريدك الإلكتروني للعمل.',
+      'Enter a valid email address, such as you@company.com.': 'أدخل بريدًا إلكترونيًا صحيحًا، مثل you@company.com.',
+      'Enter your company name.': 'أدخل اسم شركتك.',
+      'Enter a valid company name using letters or numbers.': 'أدخل اسم شركة صحيحًا يتضمن حروفًا أو أرقامًا.',
+      'Enter your company website.': 'أدخل موقع شركتك الإلكتروني.',
+      'Enter a valid website, such as https://company.com.': 'أدخل عنوان موقع صحيحًا، مثل https://company.com.',
+      'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.': 'أدخل من 7 إلى 15 رقمًا بالصيغة 0–9 مع رمز الدولة، من دون + أو مسافات أو حروف.'
+    };
+    Object.keys(errors).forEach(key => { errors[key] = arabic[errors[key]]; });
+  }
   return errors;
 }
 function normalizeCompanyWebsite(website) {

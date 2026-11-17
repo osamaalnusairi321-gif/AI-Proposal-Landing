@@ -34,7 +34,7 @@ https://docs.google.com/spreadsheets/d/1ZsFV8YmBpBvLqPNfY2h_KZb9wvtp82Jna3FZkyQr
 A bound Apps Script project has been created and the tested `backend/Code.gs` code has been saved here:
 https://script.google.com/home/projects/1kgJOGKmUttb_fTs3lRUih7JToTbAH5c6XKCiwmO87DnbQ_pprcd-jurO/edit
 
-The account owner authorized the Web App, deployed as version 2 with **Execute as: Me** and **Who has access: Anyone**. Its public `/exec` URL is configured in `config.js`. A spreadsheet URL is not a submission endpoint.
+The account owner authorized the Web App, deployed as version 3 with **Execute as: Me** and **Who has access: Anyone**. Its public `/exec` URL is configured in `config.js`. A spreadsheet URL is not a submission endpoint.
 
 Expected column order, verified in the existing spreadsheet:
 
@@ -78,3 +78,13 @@ The site files are at the repository root, with local images in `assets/`. The b
 Company name and website are mandatory for both paths. Names accept Unicode letters, spaces, apostrophes, hyphens and periods. Company names allow letters, numbers and business punctuation. Email addresses must have valid local and public domain syntax. Websites accept public domains and HTTP(S) addresses; plain domains are saved with `https://`. Phone remains optional; if supplied, it requires 7–15 ASCII digits including the country code, without + or separators.
 
 Invalid fields show red messages directly below them, expose accessible descriptions, and prevent submission. Messages disappear when corrected. The same rules run in the browser and receiver. These are format checks; they do not prove ownership or deliverability. New website columns are appended without moving existing registration columns.
+
+## Arabic version
+
+Arabic page: https://osamaalnusairi321-gif.github.io/AI-Proposal-Landing/ar/
+
+The English root page is preserved. Both pages have explicit English/Arabic links, alternate-language metadata, and share the same validation/submission code. A one-use session draft preserves entered details, the selected path and the accepted pilot commitment when the visitor switches language. It is removed after restoration or submission; it is never placed in a URL.
+
+Arabic copy, tone, terminology, reference links and editorial notes are in `docs/arabic-style-guide.md`. RTL uses logical spacing and Accuracy's Noto Arabic font pairing. Email, website and phone values retain LTR direction. Dynamic labels, errors, readiness/loading/unavailable states and the receiver's confirmation/error pages use the selected language. The form posts a hidden `language` field; the storage schema and routing remain unchanged.
+
+Bilingual verification on 17 November 2026: 22 automated checks passed. Reviewed both languages at 1400px desktop and 390px mobile, tested language switching in both directions with draft preservation, invalid field messages and pilot consent gating. Four real test submissions (English/Arabic × waitlist/pilot) saved to their correct tabs, including website, optional phone and pilot commitment. English submissions returned English confirmation and Arabic submissions returned Arabic RTL confirmation. The four labeled test entries were cleared afterward. Fixed an off-screen honeypot that would otherwise create horizontal scrolling in RTL. Asset version parameters ensure browsers refresh the updated shared files.

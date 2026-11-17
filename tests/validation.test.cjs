@@ -26,3 +26,17 @@ test('deployed backend source contains identical validation rules', () => {
  const root=path.join(__dirname,'..');
  assert.ok(fs.readFileSync(path.join(root,'backend/Code.gs'),'utf8').endsWith(fs.readFileSync(path.join(root,'validation.js'),'utf8')));
 });
+
+test('Arabic rules match English validity and localize every error', () => {
+ const scenarios=[{}, {...valid,fullName:'123'}, {...valid,email:'bad'}, {...valid,company:'***'}, {...valid,companyWebsite:'javascript:bad'}, {...valid,phone:'abc'}];
+ for(const values of scenarios){
+  const en=validateRegistration(values), ar=validateRegistration({...values,language:'ar'});
+  assert.deepEqual(Object.keys(ar),Object.keys(en));
+  for(const message of Object.values(ar))assert.match(message,/[\u0600-\u06ff]/);
+ }
+});
+test('English and Arabic dynamic copy have identical nonempty keys', () => {
+ const copy=require('../localization.js');
+ assert.deepEqual(Object.keys(copy.ar),Object.keys(copy.en));
+ for(const value of Object.values(copy.ar))assert.match(value,/[\u0600-\u06ff]/);
+});

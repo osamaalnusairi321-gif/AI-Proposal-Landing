@@ -78,3 +78,33 @@ test('busy or failed writes never show a saved confirmation', () => {
     if (!options.busy) assert.ok(app.released());
   }
 });
+
+test('Arabic confirmations and validation failures use Arabic RTL copy', () => {
+  for (const category of ['waitlist','pilot']) {
+    const app = backend();
+    const result = app.post({ ...valid, category, language: 'ar', fullName: 'محمد العتيبي', company: 'شركة الاختبار', pilotCommitment: 'yes' });
+    assert.match(result.html, /lang="ar" dir="rtl"/);
+    assert.match(result.html, /وصلنا تسجيلك بنجاح/);
+    assert.doesNotMatch(result.html, /Thank you|Your registration|Visit our main website/);
+    assert.equal(app.rows[0].row[1], 'محمد العتيبي');
+  }
+  for (const change of [{email:'bad'}, {category:'other'}, {category:'pilot',pilotCommitment:''}]) {
+    const result = backend().post({...valid,language:'ar',...change});
+    assert.match(result.html,/تعذّر إكمال التسجيل/);
+    assert.doesNotMatch(result.html,/Something went wrong|Please check|undefined/);
+  }
+});
+test('Arabic service errors and honeypot responses contain localized messages', () => {
+  for (const options of [{busy:true},{writeFails:true}]) {
+    const result=backend(options).post({...valid,language:'ar'});
+    assert.match(result.html,/lang="ar" dir="rtl"/);
+    assert.doesNotMatch(result.html,/undefined|Please try|Registration could/);
+  }
+  assert.match(backend().post({...valid,language:'ar',websiteURL:'bot'}).html,/شكرًا لك/);
+});
+test('unknown language values safely fall back to English', () => {
+  const result=backend().post({...valid,language:'<script>'});
+  assert.match(result.html,/lang="en" dir="ltr"/);
+  assert.match(result.html,/Your registration has been received/);
+  assert.doesNotMatch(result.html,/<script>/);
+});

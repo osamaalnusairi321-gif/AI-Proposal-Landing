@@ -53,8 +53,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 500; text-wrap: bala
 .plan h3 { font-size: 34px; line-height: 1.1; letter-spacing: -.02em; margin: 0 0 5px; }
 .plan-heading p { font-size: 13px; margin: 0; color: var(--muted); }
 .benefits { list-style: none; padding: 0; margin: 24px 0; display: grid; gap: 14px; }
-.benefits li { position: relative; padding-left: 26px; font-size: 14px; line-height: 1.5; }
-.benefits li::before { position: absolute; content: '✓'; left: 0; color: var(--burgundy); font-size: 16px; }
+.benefits li { position: relative; padding-inline-start: 26px; font-size: 14px; line-height: 1.5; }
+.benefits li::before { position: absolute; content: '✓'; inset-inline-start: 0; color: var(--burgundy); font-size: 16px; }
 .pilot-note { color: var(--muted); font-size: 12px; margin: auto 0 18px; }
 .plan-button { margin-top: auto; width: 100%; }
 .registration { scroll-margin-top: 24px; padding: 58px 24px 52px; background: var(--stone); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -76,7 +76,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 500; text-wrap: bala
 .consent-wrap { margin-top: 26px; padding: 20px; border: 1px solid var(--ash); background: var(--canvas); }
 .consent { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; line-height: 1.7; cursor: pointer; }
 .consent input { accent-color: var(--burgundy); width: 20px; height: 20px; margin: 2px 0 0; flex: none; }
-.consent-footnote { font-size: 12px; color: var(--muted); margin: 10px 0 0 32px; line-height: 1.6; }
+.consent-footnote { font-size: 12px; color: var(--muted); margin: 10px 0 0; margin-inline-start: 32px; line-height: 1.6; }
 .form-hint { margin: 24px 0 12px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .submit-button { width: 100%; }
 .submit-button:disabled { background: #D3CDCA; color: #6A5D60; cursor: not-allowed; }
@@ -84,7 +84,7 @@ form[aria-busy='true'] .submit-button { cursor: wait; }
 .form-status { text-align: center; min-height: 20px; margin: 12px 0 0; color: var(--burgundy-dark); font-size: 13px; line-height: 1.6; }
 .form-status.error { color: var(--burgundy-dark); }
 .form-footer { font-size: 12px; color: var(--muted); text-align: center; margin: 4px 0 0; }
-.honeypot { position: absolute; left: -10000px; opacity: 0; pointer-events: none; }
+.honeypot { position: fixed; inset: 0 auto auto 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 footer { max-width: 1200px; margin: auto; min-height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 18px 4vw; gap: 20px; color: var(--muted); font-size: 12px; }
 footer a { text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 700px) {
@@ -117,3 +117,27 @@ footer a { text-decoration: underline; text-underline-offset: 4px; }
 .field-error { color: #A31621; font-size: 12px; font-weight: 400; line-height: 1.5; }
 .field-help { color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.5; }
 .field-grid input[aria-invalid="true"] { border-color: #A31621; }
+
+.language-switch { margin-inline-start: auto; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; color: var(--burgundy); font-size: 14px; text-underline-offset: 5px; }
+.language-switch:hover { text-decoration: underline; }
+[dir="rtl"] { --font-display: 'Noto Kufi Arabic', Tahoma, sans-serif; --font-body: 'Noto Sans Arabic', Tahoma, sans-serif; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 { letter-spacing: 0; }
+[dir="rtl"] .hero h1 { font-size: clamp(38px, 5vw, 64px); line-height: 1.6; }
+[dir="rtl"] .hero h1 em { font-style: normal; }
+[dir="rtl"] .eyebrow, [dir="rtl"] .product-name { letter-spacing: 0; }
+[dir="rtl"] .product-name { font-size: 12px; }
+[dir="rtl"] .plan h3 { font-size: clamp(23px, 2.3vw, 29px); line-height: 1.7; }
+[dir="rtl"] .plan-heading { min-height: 106px; }
+[dir="rtl"] .bundles h2, [dir="rtl"] .registration h2 { font-size: clamp(27px, 3.3vw, 38px); line-height: 1.7; }
+[dir="rtl"] .button { letter-spacing: 0; line-height: 1.8; }
+[dir="rtl"] .plan-button span, [dir="rtl"] .hero-button span { transform: scaleX(-1); }
+[dir="rtl"] .field-grid, [dir="rtl"] .consent-wrap { text-align: start; }
+[dir="rtl"] input[dir="ltr"] { text-align: end; }
+@media (max-width: 700px) {
+  .header-inner { flex-wrap: wrap; gap: 6px 12px; padding-block: 14px; }
+  .brand-divider { display: none; }
+  .product-name { order: 3; flex-basis: 100%; }
+  [dir="rtl"] .hero h1 { font-size: clamp(34px, 9vw, 48px); }
+  [dir="rtl"] .plan-heading { min-height: 0; }
+  [dir="rtl"] .segment-button { padding-inline: 14px; font-size: 13px; }
+}
