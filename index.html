@@ -79,16 +79,25 @@
           <input type="hidden" name="source" value="Accuracy Proposal Engine landing page">
           <div class="field-grid">
             <label for="full-name"><span>Full name <span class="required">*</span></span>
-              <input id="full-name" name="fullName" type="text" placeholder="Your full name" autocomplete="name" maxlength="100" required>
+              <input id="full-name" name="fullName" type="text" placeholder="Your full name" autocomplete="name" maxlength="100" aria-describedby="full-name-error" required>
+              <span class="field-error" id="full-name-error" aria-live="polite" hidden></span>
             </label>
             <label for="email"><span>Work email <span class="required">*</span></span>
-              <input id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" maxlength="160" required>
+              <input id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" maxlength="160" aria-describedby="email-error" required>
+              <span class="field-error" id="email-error" aria-live="polite" hidden></span>
             </label>
-            <label for="company"><span>Company <span class="required">*</span></span>
-              <input id="company" name="company" type="text" placeholder="Your company name" autocomplete="organization" maxlength="160" required>
+            <label for="company"><span>Company name <span class="required">*</span></span>
+              <input id="company" name="company" type="text" placeholder="Your company name" autocomplete="organization" maxlength="160" aria-describedby="company-error" required>
+              <span class="field-error" id="company-error" aria-live="polite" hidden></span>
+            </label>
+            <label for="company-website"><span>Company website <span class="required">*</span></span>
+              <input id="company-website" name="companyWebsite" type="text" inputmode="url" placeholder="https://company.com" autocomplete="url" maxlength="500" aria-describedby="company-website-error" required>
+              <span class="field-error" id="company-website-error" aria-live="polite" hidden></span>
             </label>
             <label for="phone"><span>Phone number <span class="optional">(optional)</span></span>
-              <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+966 5X XXX XXXX" autocomplete="tel" maxlength="30">
+              <input id="phone" name="phone" type="tel" inputmode="numeric" placeholder="9665XXXXXXXX" autocomplete="tel" maxlength="30" aria-describedby="phone-error">
+              <span class="field-help">Digits only, including country code. No + or spaces.</span>
+              <span class="field-error" id="phone-error" aria-live="polite" hidden></span>
             </label>
           </div>
           <div class="honeypot" aria-hidden="true"><label>Leave this field blank<input name="websiteURL" tabindex="-1" autocomplete="off"></label></div>
@@ -96,7 +105,7 @@
             <label class="consent"><input id="pilot-consent" type="checkbox" name="pilotCommitment" value="yes"><span>I understand that joining the Pilot Partner Program requires me to test the product on at least two RFPs, participate in a feedback session, and provide relevant sample documents for setup. I understand that participation is subject to approval.</span></label>
             <p class="consent-footnote">Sample documents may be redacted to protect confidential information. No obligation to purchase.</p>
           </div>
-          <p class="form-hint" id="form-hint">Enter your full name, a valid work email, and company to continue.</p>
+          <p class="form-hint" id="form-hint">Complete the required fields with valid details to continue.</p>
           <button id="submit-button" class="button primary submit-button" type="submit" aria-describedby="form-hint" disabled>Join Waitlist</button>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
@@ -106,6 +115,7 @@
   </main>
   <footer><span>© <span id="year">2026</span> Accuracy Consultancy</span><a href="https://accuracyconsultancy.com/">Main website</a></footer>
   <script src="config.js"></script>
+  <script src="validation.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

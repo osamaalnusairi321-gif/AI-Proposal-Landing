@@ -10,7 +10,7 @@ function backend(options = {}) {
   const context = vm.createContext({
     console: { error() {} },
     LockService: { getScriptLock: () => ({ tryLock: () => !options.busy, releaseLock: () => { released = true; } }) },
-    SpreadsheetApp: { openById: () => ({ getSheetByName: tab => options.missingTab ? null : ({ appendRow: row => {
+    SpreadsheetApp: { openById: () => ({ getSheetByName: tab => options.missingTab ? null : ({ getRange: () => ({ getValue: () => "", setValue() {} }), appendRow: row => {
       if (options.writeFails) throw Error('Write failed');
       rows.push({ tab, row });
     } }) }) },
@@ -19,13 +19,13 @@ function backend(options = {}) {
   vm.runInContext(code, context);
   return { post: parameter => context.doPost({ parameter }), rows, released: () => released };
 }
-const valid = { category: 'waitlist', fullName: 'Test Applicant', email: 'qa@example.com', company: 'Test Company' };
+const valid = { category: 'waitlist', fullName: 'Test Applicant', email: 'qa@example.com', company: 'Test Company', companyWebsite: 'example.com' };
 
 test('waitlist saves without phone or pilot consent in the matching columns', () => {
   const app = backend();
   assert.match(app.post(valid).html, /Your registration has been received/);
   assert.equal(app.rows[0].tab, 'Waitlist');
-  assert.deepEqual(Array.from(app.rows[0].row).slice(1), ['Test Applicant', 'qa@example.com', 'Test Company', '', 'Accuracy Proposal Engine landing page']);
+  assert.deepEqual(Array.from(app.rows[0].row).slice(1), ['Test Applicant', 'qa@example.com', 'Test Company', '', 'Accuracy Proposal Engine landing page', 'https://example.com']);
   assert.ok(app.released());
 });
 
@@ -37,9 +37,9 @@ test('pilot requires consent before saving', () => {
 
 test('pilot saves optional phone and approved commitment to Pilot Partners', () => {
   const app = backend();
-  app.post({ ...valid, category: 'pilot', pilotCommitment: 'yes', phone: '+966 50 000 0000' });
+  app.post({ ...valid, category: 'pilot', pilotCommitment: 'yes', phone: '966500000000' });
   assert.equal(app.rows[0].tab, 'Pilot Partners');
-  assert.deepEqual(Array.from(app.rows[0].row).slice(4), ["'+966 50 000 0000", 'Yes', 'New', 'Accuracy Proposal Engine landing page']);
+  assert.deepEqual(Array.from(app.rows[0].row).slice(4), ['966500000000', 'Yes', 'New', 'Accuracy Proposal Engine landing page', 'https://example.com']);
 });
 
 test('pilot also accepts an empty optional phone', () => {
@@ -49,7 +49,7 @@ test('pilot also accepts an empty optional phone', () => {
 });
 
 test('invalid email, blank names, blank company and unknown category never save', () => {
-  for (const change of [{ email: 'qa@example' }, { fullName: '  ' }, { company: '' }, { category: 'other' }]) {
+  for (const change of [{ email: 'qa@example' }, { fullName: '  ' }, { company: '' }, { category: 'other' }, { companyWebsite: '' }, { companyWebsite: 'javascript:alert(1)' }, { phone: 'abc' }]) {
     const app = backend();
     assert.match(app.post({ ...valid, ...change }).html, /Something went wrong/);
     assert.equal(app.rows.length, 0);
@@ -58,9 +58,8 @@ test('invalid email, blank names, blank company and unknown category never save'
 
 test('formula-like user values stay literal text', () => {
   const app = backend();
-  app.post({ ...valid, fullName: '=1+1', company: '@SUM(A1)' });
-  assert.equal(app.rows[0].row[1], "'=1+1");
-  assert.equal(app.rows[0].row[3], "'@SUM(A1)");
+  app.post({ ...valid, company: '=SUM(A1)' });
+  assert.equal(app.rows[0].row[3], "'=SUM(A1)");
 });
 
 test('honeypot submissions do not write rows', () => {

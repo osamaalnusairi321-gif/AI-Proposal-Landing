@@ -8,19 +8,26 @@
   const status = document.getElementById('form-status');
   const hint = document.getElementById('form-hint');
   const submit = document.getElementById('submit-button');
-  const fields = ['full-name', 'email', 'company'].map(id => document.getElementById(id));
-  const email = document.getElementById('email');
+  const fields = ['full-name', 'email', 'company', 'company-website', 'phone'].map(id => document.getElementById(id));
+  const touched = new Set();
   const planButtons = [...document.querySelectorAll('[data-plan], .segment-button')];
   const waitlistButton = document.getElementById('choose-waitlist');
   const pilotButton = document.getElementById('choose-pilot');
   let submitting = false;
 
   function validate() {
-    // Match backend email validation and ignore surrounding whitespace.
-    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-    email.setCustomValidity(email.value.trim() && !validEmail ? 'Enter a valid work email, such as you@company.com.' : '');
-    return fields.every(input => input.value.trim() && input.checkValidity())
-      && (category.value !== 'pilot' || consent.checked);
+    const values = Object.fromEntries(fields.map(input => [input.name, input.value]));
+    const errors = validateRegistration(values);
+    fields.forEach(input => {
+      const message = errors[input.name] || '';
+      input.setCustomValidity(message);
+      const show = Boolean(message && touched.has(input));
+      input.setAttribute('aria-invalid', String(show));
+      const error = document.getElementById(input.id + '-error');
+      error.textContent = show ? message : '';
+      error.hidden = !show;
+    });
+    return Object.keys(errors).length === 0 && (category.value !== 'pilot' || consent.checked);
   }
 
   function updateButton() {
@@ -28,8 +35,8 @@
     submit.disabled = submitting || !valid;
     submit.setAttribute('aria-disabled', String(submit.disabled));
     submit.textContent = submitting ? 'Submitting…' : category.value === 'pilot' ? 'Apply for Pilot' : 'Join Waitlist';
-    if (!fields.every(input => input.value.trim() && input.checkValidity())) {
-      hint.textContent = 'Enter your full name, a valid work email, and company to continue.';
+    if (!fields.every(input => (!input.required || input.value.trim()) && input.checkValidity())) {
+      hint.textContent = 'Complete the required fields with valid details to continue.';
     } else if (category.value === 'pilot' && !consent.checked) {
       hint.textContent = 'Check the pilot commitment above to continue.';
     } else {
@@ -58,7 +65,14 @@
   }
 
   // Delegation covers typing, pasting, autofill events and the checkbox.
-  form.addEventListener('input', updateButton);
+  form.addEventListener('input', event => {
+    if (fields.includes(event.target)) touched.add(event.target);
+    updateButton();
+  });
+  form.addEventListener('focusout', event => {
+    if (fields.includes(event.target)) touched.add(event.target);
+    updateButton();
+  });
   form.addEventListener('change', updateButton);
   form.addEventListener('focusin', updateButton);
   document.querySelectorAll('[data-plan]').forEach(button => button.addEventListener('click', () => selectPlan(button.dataset.plan, true)));
@@ -74,7 +88,10 @@
     status.textContent = '';
     if (!validate()) {
       updateButton();
-      form.reportValidity();
+      fields.forEach(input => touched.add(input));
+      updateButton();
+      const invalid = fields.find(input => !input.validity.valid);
+      (invalid || consent).focus();
       return;
     }
 
@@ -85,6 +102,8 @@
       return;
     }
 
+    const website = document.getElementById('company-website');
+    website.value = normalizeCompanyWebsite(website.value);
     form.action = endpoint;
     submitting = true;
     form.setAttribute('aria-busy', 'true');

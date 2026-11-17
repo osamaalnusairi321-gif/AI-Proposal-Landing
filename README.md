@@ -17,8 +17,8 @@ All asset paths are relative, so the page also works under a GitHub Pages projec
 
 | Path | Required | Optional |
 | --- | --- | --- |
-| Waitlist / early access | Full name, valid work email, company | Phone |
-| Pilot Partner | Full name, valid work email, company, pilot commitment checkbox | Phone |
+| Waitlist / early access | Full name, valid work email, company name, company website | Phone |
+| Pilot Partner | Full name, valid work email, company name, company website, pilot commitment checkbox | Phone |
 
 The submit button starts grey and disabled. It becomes burgundy and enabled only when the selected path's requirements are met. Switching paths preserves contact details and removes the pilot consent requirement for waitlist registrations. Returning to Pilot Partner requires checking the commitment again.
 
@@ -34,12 +34,12 @@ https://docs.google.com/spreadsheets/d/1ZsFV8YmBpBvLqPNfY2h_KZb9wvtp82Jna3FZkyQr
 A bound Apps Script project has been created and the tested `backend/Code.gs` code has been saved here:
 https://script.google.com/home/projects/1kgJOGKmUttb_fTs3lRUih7JToTbAH5c6XKCiwmO87DnbQ_pprcd-jurO/edit
 
-The account owner authorized the Web App, deployed as version 1 with **Execute as: Me** and **Who has access: Anyone**. Its public `/exec` URL is configured in `config.js`. A spreadsheet URL is not a submission endpoint.
+The account owner authorized the Web App, deployed as version 2 with **Execute as: Me** and **Who has access: Anyone**. Its public `/exec` URL is configured in `config.js`. A spreadsheet URL is not a submission endpoint.
 
 Expected column order, verified in the existing spreadsheet:
 
-- `Waitlist`: Submitted at, Full name, Work email, Company, Phone (optional), Source.
-- `Pilot Partners`: Submitted at, Full name, Work email, Company, Phone (optional), Pilot commitment accepted, Application status, Source.
+- `Waitlist`: Submitted at, Full name, Work email, Company, Phone (optional), Source, Company website.
+- `Pilot Partners`: Submitted at, Full name, Work email, Company, Phone (optional), Pilot commitment accepted, Application status, Source, Company website.
 
 The backend validates required fields, checks pilot consent, routes to the matching tab, protects formula-like values as literal text, and uses a lock for concurrent writes. It never returns spreadsheet contents to visitors.
 
@@ -55,7 +55,7 @@ Open `http://127.0.0.1:8765/`.
 
 ```sh
 node --check script.js
-node --test tests/backend.test.cjs
+node --test tests/*.test.cjs
 ```
 
 The backend tests use a mocked spreadsheet service and do not write real registrations. Browser checks cover initial disabled state, valid waitlist without phone, pilot checkbox gating, switching paths, invalid email, whitespace-only company, the missing-endpoint message, and responsive layout.
@@ -72,3 +72,9 @@ Expected website URL after Pages is enabled:
 https://osamaalnusairi321-gif.github.io/AI-Proposal-Landing/
 
 The site files are at the repository root, with local images in `assets/`. The backend source and tests are included for maintenance; GitHub Pages does not execute `.gs` files. The deployed Google Apps Script endpoint in `config.js` handles registrations.
+
+## Field validation
+
+Company name and website are mandatory for both paths. Names accept Unicode letters, spaces, apostrophes, hyphens and periods. Company names allow letters, numbers and business punctuation. Email addresses must have valid local and public domain syntax. Websites accept public domains and HTTP(S) addresses; plain domains are saved with `https://`. Phone remains optional; if supplied, it requires 7–15 ASCII digits including the country code, without + or separators.
+
+Invalid fields show red messages directly below them, expose accessible descriptions, and prevent submission. Messages disappear when corrected. The same rules run in the browser and receiver. These are format checks; they do not prove ownership or deliverability. New website columns are appended without moving existing registration columns.
