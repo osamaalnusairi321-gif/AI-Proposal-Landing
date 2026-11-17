@@ -141,3 +141,6 @@ footer a { text-decoration: underline; text-underline-offset: 4px; }
   [dir="rtl"] .plan-heading { min-height: 0; }
   [dir="rtl"] .segment-button { padding-inline: 14px; font-size: 13px; }
 }
+
+.pilot-requirements { margin: 12px 0 0; padding-inline-start: 52px; font-size: 13px; line-height: 1.9; }
+.pilot-requirements li + li { margin-block-start: 8px; }

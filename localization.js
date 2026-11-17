@@ -10,13 +10,13 @@ const REGISTRATION_COPY = {
     unavailable: 'Registration is temporarily unavailable. Please try again later.'
   },
   ar: {
-    waitlist: 'قائمة الانتظار', pilot: 'البرنامج التجريبي', selected: 'اخترت: ',
-    join: 'انضم إلى قائمة الانتظار', apply: 'قدّم طلبًا للمشاركة في البرنامج التجريبي', sending: 'جارٍ إرسال طلبك…',
-    incomplete: 'أكمل الحقول المطلوبة ببيانات صحيحة للمتابعة.',
-    consent: 'للمتابعة، وافق على متطلبات المشاركة الموضّحة أعلاه.',
-    readyPilot: 'طلب المشاركة جاهز للإرسال. رقم الجوال اختياري.',
-    readyWaitlist: 'بياناتك جاهزة للإرسال. رقم الجوال اختياري.',
-    unavailable: 'التسجيل غير متاح مؤقتًا. يُرجى المحاولة لاحقًا.'
+    waitlist: 'قائمة الانتظار', pilot: 'البرنامج التجريبي', selected: 'نوع التسجيل: ',
+    join: 'انضم إلى قائمة الانتظار', apply: 'قدّم طلب الانضمام للبرنامج التجريبي', sending: 'جارٍ إرسال طلبك…',
+    incomplete: 'أكمل بياناتك حتى تتمكن من إرسال الطلب.',
+    consent: 'ضع علامة في المربع للموافقة على شروط التجربة.',
+    readyPilot: 'طلبك جاهز. اضغط على الزر أدناه لإرساله.',
+    readyWaitlist: 'يمكنك الآن الانضمام إلى قائمة الانتظار.',
+    unavailable: 'لا يمكن إرسال الطلب الآن. حاول مرة أخرى لاحقًا.'
   }
 };
 if (typeof module !== 'undefined') module.exports = REGISTRATION_COPY;

@@ -21,14 +21,14 @@ function validateRegistration(values) {
   if (values.language === 'ar') {
     const arabic = {
       'Enter your full name.': 'أدخل اسمك الكامل.',
-      'Use letters, spaces, apostrophes, hyphens or periods for your name.': 'اكتب اسمك بالحروف. يمكنك استخدام المسافات والشرطة والنقطة وعلامة الاقتباس.',
-      'Enter your work email address.': 'أدخل بريدك الإلكتروني للعمل.',
-      'Enter a valid email address, such as you@company.com.': 'أدخل بريدًا إلكترونيًا صحيحًا، مثل you@company.com.',
+      'Use letters, spaces, apostrophes, hyphens or periods for your name.': 'اكتب اسمك بالحروف، دون أرقام أو رموز غير مناسبة.',
+      'Enter your work email address.': 'أدخل بريد العمل الإلكتروني.',
+      'Enter a valid email address, such as you@company.com.': 'تأكد من كتابة البريد الإلكتروني بشكل صحيح، مثل you@company.com.',
       'Enter your company name.': 'أدخل اسم شركتك.',
-      'Enter a valid company name using letters or numbers.': 'أدخل اسم شركة صحيحًا يتضمن حروفًا أو أرقامًا.',
-      'Enter your company website.': 'أدخل موقع شركتك الإلكتروني.',
-      'Enter a valid website, such as https://company.com.': 'أدخل عنوان موقع صحيحًا، مثل https://company.com.',
-      'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.': 'أدخل من 7 إلى 15 رقمًا بالصيغة 0–9 مع رمز الدولة، من دون + أو مسافات أو حروف.'
+      'Enter a valid company name using letters or numbers.': 'اكتب اسم الشركة، وليس رموزًا أو علامات فقط.',
+      'Enter your company website.': 'أدخل رابط موقع الشركة.',
+      'Enter a valid website, such as https://company.com.': 'تأكد من كتابة رابط الموقع بشكل صحيح، مثل https://company.com.',
+      'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.': 'اكتب رقم الجوال مع رمز الدولة بالأرقام الإنجليزية فقط، دون + أو مسافات. يجب أن يتكوّن من 7 إلى 15 رقمًا.'
     };
     Object.keys(errors).forEach(key => { errors[key] = arabic[errors[key]]; });
   }

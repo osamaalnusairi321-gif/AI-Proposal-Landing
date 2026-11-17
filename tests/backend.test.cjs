@@ -84,13 +84,13 @@ test('Arabic confirmations and validation failures use Arabic RTL copy', () => {
     const app = backend();
     const result = app.post({ ...valid, category, language: 'ar', fullName: 'محمد العتيبي', company: 'شركة الاختبار', pilotCommitment: 'yes' });
     assert.match(result.html, /lang="ar" dir="rtl"/);
-    assert.match(result.html, /وصلنا تسجيلك بنجاح/);
+    assert.match(result.html, /تم استلام طلبك بنجاح/);
     assert.doesNotMatch(result.html, /Thank you|Your registration|Visit our main website/);
     assert.equal(app.rows[0].row[1], 'محمد العتيبي');
   }
   for (const change of [{email:'bad'}, {category:'other'}, {category:'pilot',pilotCommitment:''}]) {
     const result = backend().post({...valid,language:'ar',...change});
-    assert.match(result.html,/تعذّر إكمال التسجيل/);
+    assert.match(result.html,/لم نتمكن من إكمال التسجيل/);
     assert.doesNotMatch(result.html,/Something went wrong|Please check|undefined/);
   }
 });

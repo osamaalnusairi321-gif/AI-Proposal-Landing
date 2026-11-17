@@ -47,19 +47,19 @@ function page(message, ok, language = 'en') {
   const arabic = language === 'ar';
   const messages = {
     'Thank you.': 'شكرًا لك.',
-    'Unknown registration type.': 'اختر نوع التسجيل ثم حاول مرة أخرى.',
-    'Please check your registration details and try again.': 'راجع بيانات التسجيل ثم حاول مرة أخرى.',
-    'Please fill in your name, work email and company.': 'أكمل الاسم والبريد الإلكتروني للعمل واسم الشركة.',
-    'Pilot applicants must accept the participation commitment.': 'يُرجى الموافقة على متطلبات المشاركة في البرنامج التجريبي.',
-    'The service is busy. Please try again.': 'الخدمة مشغولة حاليًا. يُرجى المحاولة مرة أخرى.',
-    'Your registration has been received.': 'وصلنا تسجيلك بنجاح.',
-    'Registration could not be saved. Please try again later.': 'تعذّر حفظ تسجيلك. يُرجى المحاولة لاحقًا.'
+    'Unknown registration type.': 'اختر قائمة الانتظار أو البرنامج التجريبي، ثم أعد إرسال الطلب.',
+    'Please check your registration details and try again.': 'تأكد من بياناتك، ثم أرسل الطلب مرة أخرى.',
+    'Please fill in your name, work email and company.': 'أدخل اسمك وبريد العمل الإلكتروني واسم الشركة.',
+    'Pilot applicants must accept the participation commitment.': 'لإرسال طلبك، يجب الموافقة على شروط المشاركة في التجربة.',
+    'The service is busy. Please try again.': 'الخدمة مشغولة الآن. حاول مرة أخرى بعد قليل.',
+    'Your registration has been received.': 'تم استلام طلبك بنجاح.',
+    'Registration could not be saved. Please try again later.': 'لم نتمكن من حفظ طلبك. حاول إرساله مرة أخرى لاحقًا.'
   };
   if (arabic) message = messages[message];
   const brand = arabic ? 'أكيورسي للاستشارات' : 'Accuracy';
   const websiteLabel = arabic ? 'زيارة موقع أكيورسي' : 'Visit our main website';
   const mainWebsite = 'https://accuracyconsultancy.com/' + (arabic ? 'ar/' : '');
-  const heading = arabic ? (ok ? 'شكرًا لك' : 'تعذّر إكمال التسجيل') : (ok ? 'Thank you' : 'Something went wrong');
+  const heading = arabic ? (ok ? 'شكرًا لك' : 'لم نتمكن من إكمال التسجيل') : (ok ? 'Thank you' : 'Something went wrong');
   const html = `<!doctype html><html lang="${arabic ? 'ar' : 'en'}" dir="${arabic ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#7B1C2E"><title>${heading} | ${brand}</title></head><body style="margin:0;min-height:100dvh;display:grid;place-items:center;background:#FAFAF8;color:#1A0D10;font-family:Arial,sans-serif"><main style="background:white;border:1px solid #E0D9D5;border-top:3px solid #7B1C2E;padding:42px;max-width:490px;text-align:center;margin:20px"><img src="https://accuracyconsultancy.com/assets/logo.svg" alt="${arabic ? 'أكيورسي للاستشارات' : 'Accuracy Consultancy'}" width="185" height="60" style="display:block;margin:0 auto 32px"><h1 style="font-family:Georgia,serif;font-weight:400;font-size:42px;margin:0 0 20px">${heading}</h1><p style="color:#6B5A5E;line-height:1.7">${message}</p><a href="${mainWebsite}" target="_top" style="display:inline-block;margin-top:18px;color:#7B1C2E;text-underline-offset:4px">${websiteLabel}</a></main></body></html>`;
   return HtmlService.createHtmlOutput(html).setTitle(`${heading} | ${brand}`);
 }
@@ -87,14 +87,14 @@ function validateRegistration(values) {
   if (values.language === 'ar') {
     const arabic = {
       'Enter your full name.': 'أدخل اسمك الكامل.',
-      'Use letters, spaces, apostrophes, hyphens or periods for your name.': 'اكتب اسمك بالحروف. يمكنك استخدام المسافات والشرطة والنقطة وعلامة الاقتباس.',
-      'Enter your work email address.': 'أدخل بريدك الإلكتروني للعمل.',
-      'Enter a valid email address, such as you@company.com.': 'أدخل بريدًا إلكترونيًا صحيحًا، مثل you@company.com.',
+      'Use letters, spaces, apostrophes, hyphens or periods for your name.': 'اكتب اسمك بالحروف، دون أرقام أو رموز غير مناسبة.',
+      'Enter your work email address.': 'أدخل بريد العمل الإلكتروني.',
+      'Enter a valid email address, such as you@company.com.': 'تأكد من كتابة البريد الإلكتروني بشكل صحيح، مثل you@company.com.',
       'Enter your company name.': 'أدخل اسم شركتك.',
-      'Enter a valid company name using letters or numbers.': 'أدخل اسم شركة صحيحًا يتضمن حروفًا أو أرقامًا.',
-      'Enter your company website.': 'أدخل موقع شركتك الإلكتروني.',
-      'Enter a valid website, such as https://company.com.': 'أدخل عنوان موقع صحيحًا، مثل https://company.com.',
-      'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.': 'أدخل من 7 إلى 15 رقمًا بالصيغة 0–9 مع رمز الدولة، من دون + أو مسافات أو حروف.'
+      'Enter a valid company name using letters or numbers.': 'اكتب اسم الشركة، وليس رموزًا أو علامات فقط.',
+      'Enter your company website.': 'أدخل رابط موقع الشركة.',
+      'Enter a valid website, such as https://company.com.': 'تأكد من كتابة رابط الموقع بشكل صحيح، مثل https://company.com.',
+      'Enter 7–15 digits only, including the country code. Do not use +, spaces or letters.': 'اكتب رقم الجوال مع رمز الدولة بالأرقام الإنجليزية فقط، دون + أو مسافات. يجب أن يتكوّن من 7 إلى 15 رقمًا.'
     };
     Object.keys(errors).forEach(key => { errors[key] = arabic[errors[key]]; });
   }
